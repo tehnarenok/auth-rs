@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package tehdev.auth.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+	string id = 1;
+	optional string email = 2;
+	optional string login = 3;
+	optional string external_id = 4;
+	string first_name = 5;
+	string last_name = 6;
+	google.protobuf.Timestamp created_at = 7;
+	google.protobuf.Timestamp updated_at = 8;
+}
+
+message Tokens {
+	string access_token = 1;
+	string refresh_token = 2;
+	google.protobuf.Timestamp access_token_expire = 3;
+	google.protobuf.Timestamp refresh_token_expire = 4;
+}
+
+message SigninRequest {
+	optional string email = 1;
+	optional string login = 2;
+	optional string external_id = 3;
+	string first_name = 4;
+	string last_name = 5;
+	string password = 6;
+}
+
+message SigninResponse {
+	User user = 1;
+	Tokens tokens = 2;
+}
+
+message OAuthLoginRequest {
+	string provider = 1;
+}
+
+message OAuthLoginResponse {
+	User user = 1;
+	Tokens tokens = 2;
+}
+
+message LoginRequest {}
+
+message LoginResponse {
+	User user = 1;
+	Tokens tokens = 2;
+}
+
+message LogoutRequest {}
+
+message LogoutResponse {}
+
+message GetMeRequest {}
+
+message GetMeResponse {
+	User user = 1;
+}
+
+service Auth {
+	rpc Signin(SigninRequest) returns (SigninResponse);
+	rpc Login(LoginRequest) returns (LoginResponse);
+	rpc Logout(LogoutRequest) returns (LogoutResponse);
+	rpc GetMe(GetMeRequest) returns (GetMeResponse);
+}
